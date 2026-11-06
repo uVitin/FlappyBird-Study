@@ -48,7 +48,8 @@ public class PlayerController : MonoBehaviour
         // Verifica se a zona atravessada tem a etiqueta "ScoreZone"
         if (collision.CompareTag("ScoreZone"))
         {
-            Debug.Log("Ponto marcado! +1");
+            // Substituímos o Debug.Log por isso:
+            ScoreManager.Instance.AddPoint();
         }
     }
 }
