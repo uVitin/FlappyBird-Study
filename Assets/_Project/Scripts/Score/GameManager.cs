@@ -1,12 +1,14 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Necessário para recarregar a cena
+using UnityEngine.SceneManagement;
+using TMPro; // Adicionado para controlar o texto do recorde
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     [Header("Interface")]
-    [SerializeField] private GameObject gameOverPanel; // Referência ao painel que criámos
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TextMeshProUGUI highScoreText; // Nova referência
 
     private void Awake()
     {
@@ -20,18 +22,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Função chamada quando o pássaro bate
     public void GameOver()
     {
-        gameOverPanel.SetActive(true); // Liga o ecrã de Game Over
-        Time.timeScale = 0f; // Congela o jogo
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f;
+
+        // 1. Obtém a pontuação final desta partida
+        int currentScore = ScoreManager.Instance.GetScore();
+        
+        // 2. Envia para o serviço verificar se é um novo recorde
+        HighScoreService.TrySaveHighScore(currentScore);
+        
+        // 3. Atualiza o ecrã mostrando o recorde (antigo ou o novo que acabou de ser batido)
+        highScoreText.text = "RECORDE: " + HighScoreService.GetHighScore();
     }
 
-    // Função que o botão vai chamar
     public void RestartGame()
     {
-        Time.timeScale = 1f; // IMPORTANTE: Descongela o tempo antes de reiniciar
-        // Recarrega a cena atual (que se chama Gameplay)
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

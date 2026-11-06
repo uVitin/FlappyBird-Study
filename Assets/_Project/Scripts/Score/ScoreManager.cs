@@ -30,4 +30,9 @@ public class ScoreManager : MonoBehaviour
         score++; // Soma 1
         scoreText.text = score.ToString(); // Converte o número para texto e atualiza o ecrã
     }
+
+    public int GetScore()
+    {
+        return score;
+    }
 }
