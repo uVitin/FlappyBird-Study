@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        // NOVO: Desliga a simulação física temporariamente
+        rb.simulated = false;
     }
 
     private void Update()
@@ -20,6 +23,13 @@ public class PlayerController : MonoBehaviour
 
         if (spacePressed || mousePressed)
         {
+            // NOVO: Verifica se é o primeiro clique para começar o jogo
+            if (!GameManager.Instance.IsPlaying)
+            {
+                GameManager.Instance.StartGame(); // Avisa o GameManager
+                rb.simulated = true; // Acorda a gravidade e as colisões
+            }
+            
             Jump();
         }
     }

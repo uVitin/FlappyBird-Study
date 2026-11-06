@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro; // Adicionado para controlar o texto do recorde
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    // NOVO: Variável pública que os outros scripts podem ler para saber se o jogo está a decorrer
+    public bool IsPlaying { get; private set; } = false;
+
     [Header("Interface")]
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TextMeshProUGUI highScoreText; // Nova referência
+    [SerializeField] private TextMeshProUGUI highScoreText;
+    [SerializeField] private GameObject readyText; // NOVO: Referência ao texto inicial
 
     private void Awake()
     {
@@ -22,18 +26,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // NOVO: Função para iniciar a partida
+    public void StartGame()
+    {
+        IsPlaying = true;
+        readyText.SetActive(false); // Esconde a mensagem "Clique para começar"
+    }
+
     public void GameOver()
     {
+        // Garante que o jogo deixa de estar no estado "Playing"
+        IsPlaying = false; 
+
         gameOverPanel.SetActive(true);
         Time.timeScale = 0f;
 
-        // 1. Obtém a pontuação final desta partida
         int currentScore = ScoreManager.Instance.GetScore();
-        
-        // 2. Envia para o serviço verificar se é um novo recorde
         HighScoreService.TrySaveHighScore(currentScore);
-        
-        // 3. Atualiza o ecrã mostrando o recorde (antigo ou o novo que acabou de ser batido)
         highScoreText.text = "RECORDE: " + HighScoreService.GetHighScore();
     }
 

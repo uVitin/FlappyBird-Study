@@ -14,6 +14,8 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void Update()
     {
+        if (!GameManager.Instance.IsPlaying) return;
+
         // Adicionamos o tempo que passou desde o último frame ao nosso cronómetro
         timer += Time.deltaTime;
 
