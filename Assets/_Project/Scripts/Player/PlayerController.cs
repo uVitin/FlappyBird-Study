@@ -35,7 +35,8 @@ public class PlayerController : MonoBehaviour
         // Verifica se o objeto com o qual batemos tem a etiqueta "Obstacle"
         if (collision.gameObject.CompareTag("Obstacle"))
         {
-            Debug.Log("O pássaro bateu! GAME OVER!");
+            // Em vez do Debug.Log, chamamos o GameManager
+            GameManager.Instance.GameOver();
             
             // Congela o tempo do jogo para parar tudo
             Time.timeScale = 0f; 
