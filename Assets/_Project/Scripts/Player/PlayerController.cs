@@ -41,4 +41,14 @@ public class PlayerController : MonoBehaviour
             Time.timeScale = 0f; 
         }
     }
+
+    // NOVO: Método que a Unity chama quando o objeto atravessa um Trigger (colisor fantasma)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Verifica se a zona atravessada tem a etiqueta "ScoreZone"
+        if (collision.CompareTag("ScoreZone"))
+        {
+            Debug.Log("Ponto marcado! +1");
+        }
+    }
 }
